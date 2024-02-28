@@ -17,6 +17,7 @@ const btEcran3 = document.getElementById('btEcran3');
 btEcran1.addEventListener('click', ecranSuivant);
 btEcran2.addEventListener('click', ecranSuivant);
 btEcran3.addEventListener('click', ecranSuivant);
+btEcran1.disabled = true;
 
 
 const btRetour2 = document.getElementById('btRetour2');
@@ -48,4 +49,30 @@ function ecranPrecedent(){
 
     numeroEcranCourant -=1;
     container[0].children[numeroEcranCourant].style.display="block"
+}
+
+
+let elementSelectionne = null;
+const cards = ecran1.getElementsByClassName('card');
+//console.log(cards);
+
+for (let card of cards){
+    card.addEventListener('click', () => {  //change au passage de la souris
+
+        if (elementSelectionne == card){
+            btEcran1.disabled = true;
+
+            elementSelectionne.style.backgroundColor = "";  
+            elementSelectionne = null;
+        }else{
+            btEcran1.disabled = false;
+
+            for (let cardInit of cards) {
+                cardInit.style.backgroundColor = "";  
+            }
+            card.style.backgroundColor = "red";  
+            elementSelectionne = card; 
+            //console.log(elementSelectionne); 
+        }
+    });    
 }
