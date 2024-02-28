@@ -49,38 +49,44 @@ function ecranPrecedent(){
 
 //element selectionnee ecran1
 
-let elementSelectionne = null;
-const cards = ecran1.getElementsByClassName('card');
+let forfaitSelectionnee = null;
+const cardsEcran1 = ecran1.getElementsByClassName('card');
 //console.log(cards);
 
-for (let card of cards){
+for (let card of cardsEcran1){
     card.addEventListener('click', () => { 
 
-        if (elementSelectionne == card){
+        if (forfaitSelectionnee == card){
             btEcran1.disabled = true;
 
-            elementSelectionne.style.backgroundColor = "";  
-            elementSelectionne = null;
+            card.style.backgroundColor = "";  
+            forfaitSelectionnee = null;
         }else{
             btEcran1.disabled = false;
 
-            for (let cardInit of cards) {
+            for (let cardInit of cardsEcran1) {
                 cardInit.style.backgroundColor = "";  
             }
             card.style.backgroundColor = "red";  
-            elementSelectionne = card; 
-            //console.log(elementSelectionne); 
+            forfaitSelectionnee = card; 
+            //console.log(forfaitSelectionnee); 
         }
     });    
 }
 
 
 //number ecran2
-const inputNb = document.getElementById('inputNb');
-inputNb.addEventListener('change', () => {
-    //console.log(inputNb);
+const nbAnnonce = document.getElementById('inputNb');
+if (nbAnnonce.valueAsNumber > 0){
+    btEcran2.disabled = false;
+}else{
+    btEcran2.disabled = true;
+}
 
-    if (inputNb.valueAsNumber > 0){
+nbAnnonce.addEventListener('change', () => {
+    //console.log(nbAnnonce);
+
+    if (nbAnnonce.valueAsNumber > 0){
         btEcran2.disabled = false;
     }else{
         btEcran2.disabled = true;
@@ -89,4 +95,58 @@ inputNb.addEventListener('change', () => {
 
 
 //ecran3
+let optionSelectionnee = [];
+const cardsEcran3 = ecran3.getElementsByClassName('card');
+//console.log(cards);
 
+for (let option = 0; option < cardsEcran3.length; option++) {
+    
+    cardsEcran3[option].addEventListener('click', () => { 
+        
+        if (optionSelectionnee.length == 0){
+            optionSelectionnee.push(option);
+            cardsEcran3[option].style.backgroundColor = "red";  
+        }else{
+
+            if (optionSelectionnee.includes(option)){
+                let indexASupprimer = optionSelectionnee.indexOf(option);
+                optionSelectionnee.splice(indexASupprimer, 1);
+                cardsEcran3[option].style.backgroundColor = "";
+            }else{
+
+                if (optionSelectionnee.includes(2)){
+                    optionSelectionnee = [];
+    
+                    for (let cardInit of cardsEcran3) {
+                        cardInit.style.backgroundColor = "";  
+                    } 
+                }
+
+                if (option == 2){
+                    optionSelectionnee = [];
+    
+                    for (let cardInit of cardsEcran3) {
+                        cardInit.style.backgroundColor = "";  
+                    } 
+                }
+                optionSelectionnee.push(option);
+                cardsEcran3[option].style.backgroundColor = "red";  
+
+                
+                if (optionSelectionnee.length >= 2){
+                    if ((optionSelectionnee[0] == 0 && optionSelectionnee[1] == 1) || (optionSelectionnee[0] == 1 && optionSelectionnee[1] == 0)) {
+                        for (let cardInit of cardsEcran3) {
+                            cardInit.style.backgroundColor = "";  
+                        }
+                        optionSelectionnee = [];
+        
+                        cardsEcran3[2].style.backgroundColor = "red";  
+                        optionSelectionnee.push(2);
+                    }
+                }
+
+            }
+        }
+        console.log(optionSelectionnee); 
+    });    
+}
