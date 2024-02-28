@@ -16,6 +16,7 @@ const btEcran3 = document.getElementById('btEcran3');
 btEcran1.addEventListener('click', ecranSuivant);
 btEcran2.addEventListener('click', ecranSuivant);
 btEcran3.addEventListener('click', ecranSuivant);
+btEcran3.addEventListener('click', calculerPrix);
 btEcran1.disabled = true;
 
 const btRetour2 = document.getElementById('btRetour2');
@@ -30,12 +31,13 @@ ecran2.style.display="none";
 ecran4.style.display="none";
 
 
+
 function ecranSuivant(){
     for (let numero = 0; numero < nbEcran; numero++) {
         container[0].children[numero].style.display="none";
     }
     numeroEcranCourant +=1;
-    container[0].children[numeroEcranCourant].style.display="block"
+    container[0].children[numeroEcranCourant].style.display="block";
 }
 
 function ecranPrecedent(){
@@ -43,15 +45,29 @@ function ecranPrecedent(){
         container[0].children[numero].style.display="none";
     }
     numeroEcranCourant -=1;
-    container[0].children[numeroEcranCourant].style.display="block"
+    container[0].children[numeroEcranCourant].style.display="block";
 }
 
 
 //element selectionnee ecran1
+let prixForfait = null;
 
+let prixOption = 0;
+let prixparAnnonce = 0;
+let nbMois = 0;
 let forfaitSelectionnee = null;
 const cardsEcran1 = ecran1.getElementsByClassName('card');
 //console.log(cards);
+const recapPrix = document.getElementById('recapPrix');
+const recapDuree = document.getElementById('recapDuree');
+const recapDuree2 = document.getElementById('recapDuree2');
+const recapDuree3 = document.getElementById('recapDuree3');
+const recapOption1 = document.getElementById('recapOption1');
+const recapOption2 = document.getElementById('recapOption2');
+const recapOption3 = document.getElementById('recapOption3');
+recapOption1.style.display="none";
+recapOption2.style.display="none";
+recapOption3.style.display="none"; 
 
 for (let card of cardsEcran1){
     card.addEventListener('click', () => { 
@@ -69,7 +85,38 @@ for (let card of cardsEcran1){
             }
             card.style.backgroundColor = "red";  
             forfaitSelectionnee = card; 
-            //console.log(forfaitSelectionnee); 
+            console.log(forfaitSelectionnee); 
+
+            prixForfait = card.getElementsByTagName('td');
+            Duree = card.getElementsByTagName('h3');
+            console.log(prixForfait[0].children[0]);
+            console.log(Duree[0].textContent);
+
+            recapPrix.textContent = prixForfait[0].children[0].innerText;
+            if (recapPrix.textContent == "1,90€"){
+                prixparAnnonce = 1.90;
+                nbMois = 1;
+            }
+            if (recapPrix.textContent == "1,80€"){
+                prixparAnnonce = 1.80;
+                nbMois = 3;
+            }
+            if (recapPrix.textContent == "1,70€"){
+                prixparAnnonce = 1.70;
+                nbMois = 6;
+            }
+            if (recapPrix.textContent == "1,60€"){
+                prixparAnnonce = 1.60;
+                nbMois = 9;
+            }
+            if (recapPrix.textContent == "1,50€"){
+                prixparAnnonce = 1.50;
+                nbMois = 12;
+            }
+
+            recapDuree.textContent = Duree[0].textContent;
+            recapDuree2.textContent = Duree[0].textContent;
+            recapDuree3.textContent = Duree[0].textContent;
         }
     });    
 }
@@ -77,8 +124,15 @@ for (let card of cardsEcran1){
 
 //number ecran2
 const nbAnnonce = document.getElementById('inputNb');
+const recapQuantite = document.getElementById('recapQuantite');
+const finalQuantite = document.getElementById('finalQuantite');
+let nbPost = 0;
+
 if (nbAnnonce.valueAsNumber > 0){
     btEcran2.disabled = false;
+    recapQuantite.textContent = nbAnnonce.value;
+    finalQuantite.textContent = nbAnnonce.value;
+    nbPost = nbAnnonce.valueAsNumber;
 }else{
     btEcran2.disabled = true;
 }
@@ -88,6 +142,9 @@ nbAnnonce.addEventListener('change', () => {
 
     if (nbAnnonce.valueAsNumber > 0){
         btEcran2.disabled = false;
+        recapQuantite.textContent = nbAnnonce.value;
+        finalQuantite.textContent = nbAnnonce.value;
+        nbPost = nbAnnonce.valueAsNumber;
     }else{
         btEcran2.disabled = true;
     }
@@ -99,10 +156,12 @@ let optionSelectionnee = [];
 const cardsEcran3 = ecran3.getElementsByClassName('card');
 //console.log(cards);
 
+const optionrecap = document.getElementById('optionrecap');
+
 for (let option = 0; option < cardsEcran3.length; option++) {
-    
+
     cardsEcran3[option].addEventListener('click', () => { 
-        
+    
         if (optionSelectionnee.length == 0){
             optionSelectionnee.push(option);
             cardsEcran3[option].style.backgroundColor = "red";  
@@ -112,6 +171,7 @@ for (let option = 0; option < cardsEcran3.length; option++) {
                 let indexASupprimer = optionSelectionnee.indexOf(option);
                 optionSelectionnee.splice(indexASupprimer, 1);
                 cardsEcran3[option].style.backgroundColor = "";
+
             }else{
 
                 if (optionSelectionnee.includes(2)){
@@ -143,10 +203,62 @@ for (let option = 0; option < cardsEcran3.length; option++) {
                         cardsEcran3[2].style.backgroundColor = "red";  
                         optionSelectionnee.push(2);
                     }
-                }
+                }            
 
             }
         }
-        console.log(optionSelectionnee); 
+        
+        
+        //console.log(optionSelectionnee[0]);
+        if (optionSelectionnee[0] == 0){
+            prixOption=9.9;
+            optionrecap.textContent = "Duplique";
+            recapOption1.style.display="block";
+            recapOption2.style.display="none";
+            recapOption3.style.display="none";   
+        }
+
+        if (optionSelectionnee[0] == 1){
+            prixOption=9.9;
+            optionrecap.textContent = "Auto 96H";
+            recapOption1.style.display="none";
+            recapOption2.style.display="block";
+            recapOption3.style.display="none";   
+        }
+
+        if (optionSelectionnee[0] == 2){
+            prixOption=15.90;
+            optionrecap.textContent = "Pack Option Duo Duplique + Auto 96H";
+            recapOption1.style.display="none";
+            recapOption2.style.display="none";  
+            recapOption3.style.display="block";
+        }
+
+        if (optionSelectionnee.length == 0){
+            prixOption=0;
+            optionrecap.textContent = "Aucun";
+            recapOption1.style.display="none";
+            recapOption2.style.display="none";  
+            recapOption3.style.display="none";
+        }
     });    
+}
+
+const dateDebut = document.getElementById('dateDebut');
+const dateFin = document.getElementById('dateFin');
+
+function calculerPrix(){
+
+    var dateDuJour = new Date();
+    var dateDeFin = new Date();
+
+    var m=dateDeFin.getMonth()+nbMois;
+    dateDeFin.setMonth(m);
+
+    dateDebut.textContent = dateDuJour.toLocaleDateString();
+    dateFin.textContent = dateDeFin.toLocaleDateString();
+
+    const prixTotal = document.getElementById('prixTotal');
+    let calculPrixTotal = Math.round((nbPost * prixparAnnonce + nbMois * prixOption) * 100) / 100
+    prixTotal.textContent = calculPrixTotal;
 }
